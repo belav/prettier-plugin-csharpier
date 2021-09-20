@@ -68,12 +68,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 semicolonToken = enumDeclarationSyntax.SemicolonToken;
             }
 
-            var docs = new List<Doc>
+            var docs = new List<Doc>();
+            docs.AddIfNotNull(ExtraNewLines.Print(node));
+            if (node.AttributeLists.Any())
             {
-                ExtraNewLines.Print(node),
-                AttributeLists.Print(node, node.AttributeLists),
-                Modifiers.Print(node.Modifiers)
-            };
+                docs.Add(AttributeLists.Print(node, node.AttributeLists));
+            }
+
+            if (node.Modifiers.Any())
+            {
+                docs.Add(Modifiers.Print(node.Modifiers));
+            }
+
             if (keyword != null)
             {
                 docs.Add(Token.PrintWithSuffix(keyword.Value, " "));

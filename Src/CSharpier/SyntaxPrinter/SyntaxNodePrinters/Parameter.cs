@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,12 +13,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var hasAttribute = node.AttributeLists.Any();
             var groupId = hasAttribute ? Guid.NewGuid().ToString() : string.Empty;
-            var docs = new List<Doc>
+            var docs = new List<Doc>();
+
+            if (hasAttribute)
             {
-                AttributeLists.Print(node, node.AttributeLists),
-                hasAttribute ? Doc.IndentIfBreak(Doc.Line, groupId) : Doc.Null,
-                Modifiers.Print(node.Modifiers)
-            };
+                docs.Add(AttributeLists.Print(node, node.AttributeLists));
+                docs.Add(Doc.IndentIfBreak(Doc.Line, groupId));
+            }
+
+            if (node.Modifiers.Any())
+            {
+                docs.Add(Modifiers.Print(node.Modifiers));
+            }
 
             if (node.Type != null)
             {
@@ -30,7 +37,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(EqualsValueClause.Print(node.Default));
             }
 
-            return hasAttribute ? Doc.GroupWithId(groupId, docs) : Doc.Concat(docs);
+            return hasAttribute
+                ? Doc.GroupWithId(groupId, docs)
+                : docs.Count == 1 ? docs[0] : Doc.Concat(docs);
         }
     }
 }

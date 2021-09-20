@@ -37,9 +37,11 @@ namespace CSharpier.DocTypes
         public static TrailingComment TrailingComment(string comment, CommentType commentType) =>
             new() { Type = commentType, Comment = comment };
 
-        public static Concat Concat(List<Doc> contents) => new(contents);
+        public static Doc Concat(List<Doc> contents) =>
+            contents.Count == 1 ? contents[0] : new Concat(contents);
 
-        public static Concat Concat(params Doc[] contents) => new(contents);
+        public static Doc Concat(params Doc[] contents) =>
+            contents.Length == 1 ? contents[0] : new Concat(contents);
 
         public static Doc Join(Doc separator, IEnumerable<Doc> array)
         {

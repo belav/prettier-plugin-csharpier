@@ -16,26 +16,35 @@ namespace CSharpier
         }
 
         // this is inefficient without a stringBuilder, but only used for dev work and changing it to use one isn't straightforward.
-        private static string Serialize(Doc document, string indent)
+        private static string Serialize(Doc document, string indent, Doc? parent = null)
         {
             var newLine = Environment.NewLine;
             var nextIndent = indent + "    ";
-            string PrintIndentedDocTree(Doc doc)
+            string PrintIndentedDocTree(Doc doc, Doc? parent = null)
             {
-                return Serialize(doc, nextIndent);
+                return Serialize(doc, nextIndent, parent);
             }
 
             string PrintConcat(Concat concatToPrint)
             {
-                var result = indent + "Doc.Concat(";
-                if (concatToPrint.Contents.Count > 0)
+                var skipConcat =
+                    parent is IHasContents hasContents && hasContents.Contents == concatToPrint;
+
+                var result = "";
+                if (!skipConcat)
                 {
-                    result += newLine;
+                    result += indent + "Doc.Concat(";
+                    if (concatToPrint.Contents.Count > 0)
+                    {
+                        result += newLine;
+                    }
                 }
 
                 for (var x = 0; x < concatToPrint.Contents.Count; x++)
                 {
-                    var printResult = PrintIndentedDocTree(concatToPrint.Contents[x]);
+                    var printResult = skipConcat
+                        ? Serialize(concatToPrint.Contents[x], indent)
+                        : PrintIndentedDocTree(concatToPrint.Contents[x]);
                     result += printResult;
                     if (x < concatToPrint.Contents.Count - 1)
                     {
@@ -43,7 +52,10 @@ namespace CSharpier
                     }
                 }
 
-                result += newLine + indent + ")";
+                if (!skipConcat)
+                {
+                    result += newLine + indent + ")";
+                }
                 return result;
             }
 
@@ -76,12 +88,12 @@ namespace CSharpier
                 ForceFlat forceFlat
                   => $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})",
                 IndentDoc indentDoc
-                  => $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)}{newLine}{indent})",
+                  => $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents, indentDoc)}{newLine}{indent})",
                 ConditionalGroup conditionalGroup
                   => $"{indent}Doc.ConditionalGroup({newLine}{PrintIndentedDocTree(conditionalGroup.Contents)}{newLine}{indent})",
                 Group group
                   => @$"{indent}Doc.Group{(@group.GroupId != null ? "WithId" : string.Empty)}(
-{(@group.GroupId != null ? $"{nextIndent}\"{@group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)}{newLine}{indent})",
+{(@group.GroupId != null ? $"{nextIndent}\"{@group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents, @group)}{newLine}{indent})",
                 LeadingComment leadingComment
                   => $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
                 TrailingComment trailingComment

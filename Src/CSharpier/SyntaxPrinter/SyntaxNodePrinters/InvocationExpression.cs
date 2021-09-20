@@ -14,7 +14,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(InvocationExpressionSyntax node)
         {
-            var printedNodes = new List<PrintedNode>();
+            var printedNodes = new List<(CSharpSyntaxNode node, Doc doc)>();
 
             void Traverse(ExpressionSyntax expression)
             {
@@ -34,9 +34,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 {
                     Traverse(invocationExpressionSyntax.Expression);
                     printedNodes.Add(
-                        new PrintedNode(
-                            Node: invocationExpressionSyntax,
-                            Doc: ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
+                        (
+                            node: invocationExpressionSyntax,
+                            doc: ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
                         )
                     );
                 }
@@ -44,9 +44,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 {
                     Traverse(memberAccessExpressionSyntax.Expression);
                     printedNodes.Add(
-                        new PrintedNode(
-                            Node: memberAccessExpressionSyntax,
-                            Doc: Doc.Concat(
+                        (
+                            node: memberAccessExpressionSyntax,
+                            doc: Doc.Concat(
                                 Token.Print(memberAccessExpressionSyntax.OperatorToken),
                                 Node.Print(memberAccessExpressionSyntax.Name)
                             )
@@ -55,22 +55,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 }
                 else
                 {
-                    printedNodes.Add(
-                        new PrintedNode(Node: expression, Doc: Node.Print(expression))
-                    );
+                    printedNodes.Add((node: expression, doc: Node.Print(expression)));
                 }
             }
 
             Traverse(node);
 
             var groups = new List<List<Doc>>();
-            var currentGroup = new List<Doc> { printedNodes[0].Doc };
+            var currentGroup = new List<Doc> { printedNodes[0].doc };
             var index = 1;
             for (; index < printedNodes.Count; index++)
             {
-                if (printedNodes[index].Node is MemberAccessExpressionSyntax)
+                if (printedNodes[index].node is MemberAccessExpressionSyntax)
                 {
-                    currentGroup.Add(printedNodes[index].Doc);
+                    currentGroup.Add(printedNodes[index].doc);
                 }
                 else
                 {
@@ -79,9 +77,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
 
             // TODO GH-7 there is a lot more code in prettier for how to get this all working, also include some documents
-            if (printedNodes[index].Node is MemberAccessExpressionSyntax)
+            if (printedNodes[index].node is MemberAccessExpressionSyntax)
             {
-                currentGroup.Add(printedNodes[index].Doc);
+                currentGroup.Add(printedNodes[index].doc);
                 index++;
             }
 
@@ -91,7 +89,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var hasSeenInvocationExpression = false;
             for (; index < printedNodes.Count; index++)
             {
-                if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].Node))
+                if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].node))
                 {
                     // [0] should be appended at the end of the group instead of the
                     // beginning of the next one
@@ -104,11 +102,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     hasSeenInvocationExpression = false;
                 }
 
-                if (printedNodes[index].Node is InvocationExpressionSyntax)
+                if (printedNodes[index].node is InvocationExpressionSyntax)
                 {
                     hasSeenInvocationExpression = true;
                 }
-                currentGroup.Add(printedNodes[index].Doc);
+                currentGroup.Add(printedNodes[index].doc);
                 // if (printedNodes[i].node.comments && printedNodes[i].node.comments.some(comment => comment.trailing)) {
                 //     groups.push(currentGroup);
                 //     currentGroup = [];
@@ -242,27 +240,6 @@ class ClassName
             object?,
             Task<object>
         >(GetSatelliteAssemblies, culturesToLoad.ToArray(), null, null);
-
-
-
-        // extra indent?
-        return value == null
-          ? CallMethod(
-                    value.ToString(),
-                    "([a-z])([A-Z])",
-                    "$1-$2",
-                    RegexOptions.None,
-                    TimeSpan.FromMilliseconds(100)
-                )
-                .ToLowerInvariant()
-          : Regex.Replace(
-                    value.ToString(),
-                    "([a-z])([A-Z])",
-                    "$1-$2",
-                    RegexOptions.None,
-                    TimeSpan.FromMilliseconds(100)
-                )
-                .ToLowerInvariant();
 
         var ex = Assert.Throws<ArgumentException>(
             () =>

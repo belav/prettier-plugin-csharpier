@@ -40,15 +40,6 @@ namespace CSharpier.Utilities
             return value == null || string.IsNullOrEmpty(value.Trim());
         }
 
-        public static void Add(this List<Doc> list, params Doc[] values)
-        {
-            if (values.Length == 1 && values[0] == Doc.Null)
-            {
-                return;
-            }
-            list.AddRange(values);
-        }
-
         // this will eventually deal with the visual width not being the same as the code width https://github.com/belav/csharpier/issues/260
         public static int GetPrintedWidth(this string value)
         {
