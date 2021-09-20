@@ -67,7 +67,7 @@ namespace CSharpier
                     {
                         Code = code,
                         Errors = diagnostics,
-                        AST = printerOptions.IncludeAST ? this.PrintAST(rootNode) : string.Empty
+                        AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty
                     };
 
                     return true;
@@ -129,7 +129,7 @@ namespace CSharpier
                     DocTree = printerOptions.IncludeDocTree
                         ? DocSerializer.Serialize(document)
                         : string.Empty,
-                    AST = printerOptions.IncludeAST ? this.PrintAST(rootNode) : string.Empty
+                    AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty
                 };
             }
             catch (InTooDeepException)
@@ -161,7 +161,7 @@ namespace CSharpier
             return printerOptions.EndOfLine == EndOfLine.CRLF ? "\r\n" : "\n";
         }
 
-        private string PrintAST(CompilationUnitSyntax rootNode)
+        private static string PrintAST(CompilationUnitSyntax rootNode)
         {
             var stringBuilder = new StringBuilder();
             SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);

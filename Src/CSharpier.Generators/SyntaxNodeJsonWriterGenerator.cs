@@ -238,7 +238,7 @@ namespace CSharpier.Generators
 
         private static string CamelCaseName(string name)
         {
-            return name.ToLower()[0] + name.Substring(1);
+            return name.ToLower()[0] + name[1..];
         }
 
         private static string PadToSize(string value, int size)

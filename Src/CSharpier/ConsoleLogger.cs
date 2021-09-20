@@ -65,7 +65,7 @@ namespace CSharpier
             }
         }
 
-        private ConsoleColor GetColorLevel(LogLevel logLevel) =>
+        private static ConsoleColor GetColorLevel(LogLevel logLevel) =>
             logLevel switch
             {
                 LogLevel.Critical => ConsoleColor.DarkRed,

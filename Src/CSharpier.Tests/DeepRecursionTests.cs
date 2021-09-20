@@ -15,7 +15,7 @@ namespace CSharpier.Tests
             result.FailureMessage.Should().Be("We can't handle this deep of recursion yet.");
         }
 
-        private string uglyLongConcatenatedString =
+        private readonly string uglyLongConcatenatedString =
             @"public class ClassName 
 {
     private string field = ""1"" +

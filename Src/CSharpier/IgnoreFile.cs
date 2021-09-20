@@ -30,9 +30,7 @@ namespace CSharpier
                 );
             }
 
-            normalizedFilePath = normalizedFilePath.Substring(
-                this.IgnoreBaseDirectoryPath.Length + 1
-            );
+            normalizedFilePath = normalizedFilePath[(this.IgnoreBaseDirectoryPath.Length + 1)..];
 
             return this.Ignore.IsIgnored(normalizedFilePath);
         }

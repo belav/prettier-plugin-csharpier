@@ -11,16 +11,16 @@ namespace CSharpier.Tests.Samples
         [Test]
         public void Scratch()
         {
-            this.RunTest("Scratch");
+            RunTest("Scratch");
         }
 
         [Test]
         public void AllInOne()
         {
-            this.RunTest("AllInOne");
+            RunTest("AllInOne");
         }
 
-        public void RunTest(string fileName)
+        public static void RunTest(string fileName)
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
             while (directory.Name != "CSharpier.Tests")

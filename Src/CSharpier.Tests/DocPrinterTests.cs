@@ -7,7 +7,7 @@ namespace CSharpier.Tests
 {
     public class DocPrinterTests
     {
-        private static string NewLine = System.Environment.NewLine;
+        private static readonly string NewLine = System.Environment.NewLine;
 
         [Test]
         public void Lines_Allowed()

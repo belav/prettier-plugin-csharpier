@@ -38,7 +38,7 @@ namespace CSharpier.Tests.SyntaxPrinter
             result.Should().ContainInOrder("DEBUG");
         }
 
-        private string[] AddSymbolSet(ConditionalDirectiveTriviaSyntax trivia)
+        private static string[] AddSymbolSet(ConditionalDirectiveTriviaSyntax trivia)
         {
             TestablePreprocessorSymbols.Reset();
 
@@ -48,7 +48,7 @@ namespace CSharpier.Tests.SyntaxPrinter
                 ?? Array.Empty<string>();
         }
 
-        private IfDirectiveTriviaSyntax WhenIfDirectiveHasCondition(string condition)
+        private static IfDirectiveTriviaSyntax WhenIfDirectiveHasCondition(string condition)
         {
             return SyntaxFactory.IfDirectiveTrivia(
                 SyntaxFactory.ParseExpression(condition),
@@ -58,7 +58,7 @@ namespace CSharpier.Tests.SyntaxPrinter
             );
         }
 
-        private ElifDirectiveTriviaSyntax WhenElifDirectiveHasCondition(string condition)
+        private static ElifDirectiveTriviaSyntax WhenElifDirectiveHasCondition(string condition)
         {
             return SyntaxFactory.ElifDirectiveTrivia(
                 SyntaxFactory.ParseExpression(condition),

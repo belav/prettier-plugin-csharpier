@@ -42,7 +42,7 @@ namespace CSharpier.Utilities
                 }
             }
 
-            stringBuilder.Length = stringBuilder.Length - trimmed;
+            stringBuilder.Length -= trimmed;
             return trimmed;
         }
     }

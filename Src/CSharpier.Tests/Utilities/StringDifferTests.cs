@@ -125,7 +125,7 @@ four
                 );
         }
 
-        private string PrintDifference(string expected, string actual)
+        private static string PrintDifference(string expected, string actual)
         {
             return StringDiffer.PrintFirstDifference(expected, actual);
         }

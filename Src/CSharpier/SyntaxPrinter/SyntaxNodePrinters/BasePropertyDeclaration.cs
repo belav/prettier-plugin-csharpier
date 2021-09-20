@@ -82,10 +82,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 contents = Doc.Concat(ArrowExpressionClause.Print(expressionBody));
             }
 
-            var docs = new List<Doc>();
-
-            docs.Add(ExtraNewLines.Print(node));
-            docs.Add(AttributeLists.Print(node, node.AttributeLists));
+            var docs = new List<Doc>
+            {
+                ExtraNewLines.Print(node),
+                AttributeLists.Print(node, node.AttributeLists)
+            };
 
             return Doc.Group(
                 Doc.Concat(

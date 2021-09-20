@@ -15,7 +15,7 @@ namespace CSharpier.Tests
             var left = "class ClassName { }";
             var right = @"namespace Namespace { }";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
 
             ResultShouldBe(
                 result,
@@ -35,7 +35,7 @@ namespace Namespace { }
                 @"class ClassName {
 }";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
 
             result.Should().BeEmpty();
         }
@@ -62,7 +62,7 @@ namespace Namespace { }
 }
 ";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
 
             result.Should()
                 .Be(
@@ -106,7 +106,7 @@ public class ConstructorWithBase
 }
 ";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
 
             ResultShouldBe(
                 result,
@@ -169,7 +169,7 @@ class Resources
 }
 ";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
 
             result.Should().BeEmpty();
         }
@@ -189,7 +189,7 @@ class Resources
     Integer,
     String,
 }";
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
 
             ResultShouldBe(
                 result,
@@ -213,7 +213,7 @@ public enum Enum
             var left = "  public class ClassName { }";
             var right = "public class ClassName { }";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
             result.Should().BeEmpty();
         }
 
@@ -225,7 +225,7 @@ public enum Enum
 public class ClassName { }";
             var right = "public class ClassName { }";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
             ResultShouldBe(
                 result,
                 @"----------------------------- Original: Around Line 0 -----------------------------
@@ -257,7 +257,7 @@ public class ClassName { }";
 // 7
 public class ClassName { }";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
             ResultShouldBe(
                 result,
                 @"----------------------------- Original: Around Line 5 -----------------------------
@@ -288,7 +288,7 @@ public class ClassName { }
                 + start
                 + "\"EndThisLineWith\nEndThisLineWith\n\";\n}";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
             result.Should().BeEmpty();
         }
 
@@ -311,11 +311,11 @@ public class ClassName { }
 }
 ";
 
-            var result = this.AreEqual(left, right);
+            var result = AreEqual(left, right);
             result.Should().BeEmpty();
         }
 
-        private void ResultShouldBe(string result, string be)
+        private static void ResultShouldBe(string result, string be)
         {
             if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
             {
@@ -325,7 +325,7 @@ public class ClassName { }
             result.Should().Be(be);
         }
 
-        private string AreEqual(string left, string right)
+        private static string AreEqual(string left, string right)
         {
             var result = new SyntaxNodeComparer(
                 left,

@@ -64,7 +64,7 @@ namespace CSharpier
             return message;
         }
 
-        private string GetLine(TextSpan? textSpan, SyntaxTree syntaxTree, string source)
+        private static string GetLine(TextSpan? textSpan, SyntaxTree syntaxTree, string source)
         {
             if (!textSpan.HasValue)
             {
@@ -166,7 +166,7 @@ namespace CSharpier
             return Equal;
         }
 
-        private CompareResult NotEqual(SyntaxNode? originalNode, SyntaxNode? formattedNode)
+        private static CompareResult NotEqual(SyntaxNode? originalNode, SyntaxNode? formattedNode)
         {
             return new()
             {
@@ -176,7 +176,7 @@ namespace CSharpier
             };
         }
 
-        private CompareResult NotEqual(TextSpan? originalSpan, TextSpan? formattedSpan)
+        private static CompareResult NotEqual(TextSpan? originalSpan, TextSpan? formattedSpan)
         {
             return new() { IsInvalid = true, OriginalSpan = originalSpan, NewSpan = formattedSpan };
         }

@@ -75,21 +75,6 @@ namespace CSharpier.Playground.Controllers
             return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString(), };
         }
 
-        private string ReadAllText(string filePath)
-        {
-            return System.IO.File.ReadAllText(filePath);
-        }
-
-        private void WriteAllText(string filePath, string content)
-        {
-            System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
-        }
-
-        private bool Exists(string filePath)
-        {
-            return System.IO.File.Exists(filePath);
-        }
-
         public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
         {
             var processStartInfo = new ProcessStartInfo(pathToExe, args)

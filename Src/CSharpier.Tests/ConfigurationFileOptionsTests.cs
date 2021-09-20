@@ -140,8 +140,9 @@ preprocessorSymbolSets:
             result.PrintWidth.Should().Be(10);
         }
 
-        private void ShouldHaveDefaultOptions(ConfigurationFileOptions configurationFileOptions)
-        {
+        private static void ShouldHaveDefaultOptions(
+            ConfigurationFileOptions configurationFileOptions
+        ) {
             configurationFileOptions.PrintWidth.Should().Be(100);
             configurationFileOptions.PreprocessorSymbolSets.Should().BeNull();
         }

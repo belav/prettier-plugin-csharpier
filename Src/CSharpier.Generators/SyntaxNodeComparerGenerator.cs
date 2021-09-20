@@ -76,7 +76,7 @@ namespace CSharpier
             foreach (var syntaxNodeType in syntaxNodeTypes)
             {
                 var lowerCaseName =
-                    syntaxNodeType.Name[0].ToString().ToLower() + syntaxNodeType.Name.Substring(1);
+                    syntaxNodeType.Name[0].ToString().ToLower() + syntaxNodeType.Name[1..];
                 sourceBuilder.AppendLine(
                     $@"                case {syntaxNodeType.Name} {lowerCaseName}:
                     return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});"
@@ -104,7 +104,7 @@ namespace CSharpier
             return sourceBuilder.ToString();
         }
 
-        private void GenerateMethod(StringBuilder sourceBuilder, Type type)
+        private static void GenerateMethod(StringBuilder sourceBuilder, Type type)
         {
             sourceBuilder.AppendLine(
                 @$"        private CompareResult Compare{type.Name}({type.Name} originalNode, {type.Name} formattedNode)
@@ -206,7 +206,7 @@ namespace CSharpier
 
         private static string CamelCaseName(string name)
         {
-            return name.ToLower()[0] + name.Substring(1);
+            return name.ToLower()[0] + name[1..];
         }
     }
 }

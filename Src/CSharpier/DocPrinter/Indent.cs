@@ -33,7 +33,7 @@ namespace CSharpier.DocPrinter
             PrinterOptions = printerOptions;
         }
 
-        public Indent GenerateRoot()
+        public static Indent GenerateRoot()
         {
             return new();
         }

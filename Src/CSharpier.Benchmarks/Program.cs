@@ -29,7 +29,7 @@ namespace CSharpier.Benchmarks
             DisabledTextComparer.IsCodeBasicallyEqual(code, code);
         }
 
-        private string code =
+        private readonly string code =
             @"using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -468,7 +468,7 @@ public class CommandLineFormatter
     {
         static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<Benchmarks>();
+            _ = BenchmarkRunner.Run<Benchmarks>();
         }
     }
 }

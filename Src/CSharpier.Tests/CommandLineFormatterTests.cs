@@ -44,11 +44,9 @@ namespace CSharpier.Tests
         {
             WhenAFileExists("Unsupported.js", "asdfasfasdf");
 
-            var result = this.Format(directoryOrFilePaths: "Unsupported.js");
+            var (exitCode, lines) = this.Format(directoryOrFilePaths: "Unsupported.js");
 
-            result.lines.First()
-                .Should()
-                .Be(@"Error /Unsupported.js - Is an unsupported file type.");
+            lines.First().Should().Be(@"Error /Unsupported.js - Is an unsupported file type.");
         }
 
         [Test]
@@ -95,8 +93,7 @@ namespace CSharpier.Tests
         {
             const string formattedFilePath = "Formatted.cs";
             WhenAFileExists(formattedFilePath, FormattedClassContent);
-
-            var (exitCode, lines) = this.Format(check: true);
+            var (exitCode, _) = this.Format(check: true);
 
             exitCode.Should().Be(0);
         }

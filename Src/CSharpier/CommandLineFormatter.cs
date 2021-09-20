@@ -328,7 +328,7 @@ namespace CSharpier
 
         private string GetPath(string file)
         {
-            return file.Substring(this.BaseDirectoryPath.Length);
+            return file[this.BaseDirectoryPath.Length..];
         }
 
         private static int ReturnExitCode(

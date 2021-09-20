@@ -67,7 +67,7 @@ namespace CSharpier.Tests
             missingTypes.Should().BeEmpty();
         }
 
-        private HashSet<string> ignored =
+        private readonly HashSet<string> ignored =
             new()
             {
                 "AccessorDeclarationSyntax",

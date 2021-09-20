@@ -46,6 +46,7 @@ ProjectSection(SolutionItems) = preProject
 				README.md = README.md
 				CONTRIBUTING.md = CONTRIBUTING.md
 				CHANGELOG.md = CHANGELOG.md
+	Docs\IntegratingWithLinters.md = Docs\IntegratingWithLinters.md
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"
