@@ -24,5 +24,15 @@ class ClassName
         this.WhenThereExists________________(
             a.Website().WithDomainName("test-integration.insite.com")
         );
+
+        return someCondition
+          ? CallMethod(
+                someLongParameter____________________________,
+                someLongParameter____________________________
+            )
+          : Something.CallMethod(
+                someLongParameter____________________________,
+                someLongParameter____________________________
+            );
     }
 }

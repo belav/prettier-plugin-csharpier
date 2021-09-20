@@ -18,8 +18,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Align(2, Node.Print(node.WhenFalse))
             };
 
-            var groupId = Guid.NewGuid().ToString();
-
             return Doc.Group(
                 node.Parent is ReturnStatementSyntax
                 && node.Condition is BinaryExpressionSyntax or IsPatternExpressionSyntax
