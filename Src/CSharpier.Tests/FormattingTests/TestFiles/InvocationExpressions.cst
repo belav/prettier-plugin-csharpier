@@ -16,10 +16,11 @@ class ClassName
         var superLongMethodNameForceLine_____________________ =
             someFactoryName.SuperLongMethodNameForceLine();
 
-        // this should be changed by #7
-        var superLongMethodNameForceLine__________________________ =
-            someFactoryName.SuperLongMethodNameForceLine____________()
-                .SomeOtherReallyLongMethodName();
+        var someValue = someOtherValue.Where(o => someLongCondition).Where(o => someLongCondition);
+
+        var someValue = someOtherValue
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
 
         this.WhenThereExists________________(
             a.Website().WithDomainName("test-integration.insite.com")

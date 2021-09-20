@@ -20,6 +20,23 @@ namespace CSharpier
         {
             var newLine = Environment.NewLine;
             var nextIndent = indent + "    ";
+
+            string PrintIndentedDocArray(Doc[] docs)
+            {
+                var result = "";
+                for (var x = 0; x < docs.Length; x++)
+                {
+                    var printResult = PrintIndentedDocTree(docs[x]);
+                    result += printResult;
+                    if (x < docs.Length - 1)
+                    {
+                        result += "," + newLine;
+                    }
+                }
+
+                return result;
+            }
+
             string PrintIndentedDocTree(Doc doc, Doc? parent = null)
             {
                 return Serialize(doc, nextIndent, parent);
@@ -90,7 +107,7 @@ namespace CSharpier
                 IndentDoc indentDoc
                   => $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents, indentDoc)}{newLine}{indent})",
                 ConditionalGroup conditionalGroup
-                  => $"{indent}Doc.ConditionalGroup({newLine}{PrintIndentedDocTree(conditionalGroup.Contents)}{newLine}{indent})",
+                  => $"{indent}Doc.ConditionalGroup({newLine}{PrintIndentedDocArray(conditionalGroup.Options)}{newLine}{indent})",
                 Group group
                   => @$"{indent}Doc.Group{(@group.GroupId != null ? "WithId" : string.Empty)}(
 {(@group.GroupId != null ? $"{nextIndent}\"{@group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents, @group)}{newLine}{indent})",

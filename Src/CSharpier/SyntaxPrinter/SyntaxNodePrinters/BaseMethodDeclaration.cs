@@ -131,14 +131,25 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 );
             }
 
-            if (typeParameterList != null)
+            if (typeParameterList != null && typeParameterList.Parameters.Any())
             {
                 declarationGroup.Add(TypeParameterList.Print(typeParameterList));
             }
 
             if (parameterList != null)
             {
-                declarationGroup.Add(ParameterList.Print(parameterList));
+                if (parameterList.Parameters.Any())
+                {
+                    declarationGroup.Add(ParameterList.Print(parameterList));
+                }
+                else
+                {
+                    declarationGroup.Add(
+                        Token.Print(parameterList.OpenParenToken),
+                        Token.Print(parameterList.CloseParenToken)
+                    );
+                }
+
                 declarationGroup.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine));
             }
 

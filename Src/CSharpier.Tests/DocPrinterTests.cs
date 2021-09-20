@@ -629,6 +629,32 @@ true || false"
         }
 
         [Test]
+        public void Conditional_Group_Prints_Alternative_If_Initial_Group_Does_Not_Fit()
+        {
+            var doc = Doc.ConditionalGroup(
+                Doc.Concat(
+                    Doc.Group("(", Doc.SoftLine, "1111111", ")"),
+                    Doc.Group("(", Doc.SoftLine, "1111111", ")")
+                ),
+                Doc.Concat("(1111111)", Doc.HardLine, "(1111111)")
+            );
+            PrintedDocShouldBe(doc, $"(1111111){NewLine}(1111111)", 10);
+        }
+
+        [Test]
+        public void Conditional_Group_Prints_Initial_Group_If_It_Fit()
+        {
+            var doc = Doc.ConditionalGroup(
+                Doc.Concat(
+                    Doc.Group("(", Doc.SoftLine, "1", ")"),
+                    Doc.Group("(", Doc.SoftLine, "1", ")")
+                ),
+                Doc.Concat("(1)", Doc.HardLine, "(1)")
+            );
+            PrintedDocShouldBe(doc, "(1)(1)", 10);
+        }
+
+        [Test]
         public void Align_Should_Print_Basic_Case()
         {
             var doc = Doc.Concat("+ ", Doc.Align(2, Doc.Group("1", Doc.HardLine, "2")));

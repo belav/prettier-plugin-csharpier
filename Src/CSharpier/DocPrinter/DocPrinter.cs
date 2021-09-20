@@ -244,7 +244,7 @@ namespace CSharpier.DocPrinter
                     else
                     {
                         var foundSomethingThatFits = false;
-                        foreach (var option in conditionalGroup.Options)
+                        foreach (var option in conditionalGroup.Options.Skip(1))
                         {
                             possibleCommand = new PrintCommand(indent, mode, option);
                             if (!Fits(possibleCommand))
@@ -258,7 +258,7 @@ namespace CSharpier.DocPrinter
 
                         if (!foundSomethingThatFits)
                         {
-                            RemainingCommands.Push(possibleCommand!);
+                            RemainingCommands.Push(possibleCommand);
                         }
                     }
                 }
