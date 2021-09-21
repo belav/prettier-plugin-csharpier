@@ -41,7 +41,8 @@ class ClassName
             someLongName____________
                 < someOtherLongName__________________________________________________;
             someLongishName_________________________++
-        ) {
+        )
+        {
             break;
         }
 
@@ -49,7 +50,8 @@ class ClassName
             var someShortName = 0, anotherShortName = 1;
             someRandomCondition;
             someShortName++, anotherShortName++
-        ) {
+        )
+        {
             break;
         }
 
@@ -59,7 +61,8 @@ class ClassName
             someRandomCondition;
             someLongerName_________________________++,
                 anotherLongerName________________________________++
-        ) {
+        )
+        {
             break;
         }
 
@@ -78,7 +81,8 @@ class ClassName
             y = 0;
             y < justOver100____________________________________________________________;
             y++
-        ) {
+        )
+        {
             break;
         }
     }

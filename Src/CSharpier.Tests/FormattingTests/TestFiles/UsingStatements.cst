@@ -30,7 +30,8 @@ class ClassName
             BeginScope()
                 .LongerMethod_________________________()
                 .MakeThisThingChain______________________()
-        ) {
+        )
+        {
             return;
         }
 
@@ -53,7 +54,8 @@ class ClassName
 
         using (
             var x = SomeMethodCallThatHitsJustOver100__________________________________________()
-        ) {
+        )
+        {
             return;
         }
 

@@ -44,8 +44,9 @@ class ClassName<T> where T : class
     public static ReturnType<T> MethodName<T, U>(
         string longParameter_______________________,
         string longParameter_______________________
-    ) where T : class
-      where U : class
+    )
+        where T : class
+        where U : class
     {
         return;
     }
@@ -53,8 +54,9 @@ class ClassName<T> where T : class
     public static ReturnType<T> MethodName<T, U>(
         string longParameter_______________________,
         string longParameter_______________________
-    ) where T : class
-      where U : class { }
+    )
+        where T : class
+        where U : class { }
 }
 
 interface InterfaceName<T> where T : class { }

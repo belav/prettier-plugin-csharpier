@@ -35,7 +35,8 @@ public class ClassName
             && longerStatementName
             && evenLongerStatementName
             && superLongStatementName
-        ) {
+        )
+        {
             return;
         }
 
@@ -68,7 +69,8 @@ public class ClassName
 
         if (
             justOver100 || moreTextToMakeItWork_____________________________________________________
-        ) {
+        )
+        {
             return;
         }
 

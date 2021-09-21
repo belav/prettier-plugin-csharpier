@@ -9,7 +9,8 @@ record MostlyWeeklyTemperature(
     double thursday,
     double friday,
     double sunday
-) {
+)
+{
     public double Mean => (monday + monday + thursday + friday + sunday) / 5.0;
 }
 
@@ -37,11 +38,12 @@ public record LotsOfParametersWithBaseWithLots(
     string longNameParameter,
     string areTheyCalledParametersWithRecords,
     string theyLookLikeParameters
-) : BaseRecord(
-      longNameParameter,
-      areTheyCalledParametersWithRecords,
-      theyLookLikeParameters,
-      "someExtraValueToMakeThisReallyLong"
-  );
+)
+    : BaseRecord(
+          longNameParameter,
+          areTheyCalledParametersWithRecords,
+          theyLookLikeParameters,
+          "someExtraValueToMakeThisReallyLong"
+      );
 
 public record SomeRecord : SomeBaseRecord { }

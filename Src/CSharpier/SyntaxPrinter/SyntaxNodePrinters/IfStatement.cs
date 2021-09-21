@@ -17,25 +17,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(ExtraNewLines.Print(node));
             }
 
-            var groupId = Guid.NewGuid().ToString();
-
             docs.Add(
                 Doc.Group(
-                    Token.PrintLeadingTrivia(node.IfKeyword),
-                    Doc.Group(
-                        Token.PrintWithoutLeadingTrivia(node.IfKeyword),
-                        " ",
-                        Token.Print(node.OpenParenToken),
-                        Doc.GroupWithId(
-                            groupId,
-                            Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)),
-                            Doc.SoftLine
-                        ),
-                        Token.Print(node.CloseParenToken),
-                        Doc.IfBreak(Doc.Null, Doc.SoftLine)
-                    ),
-                    OptionalBraces.Print(node.Statement, groupId)
-                )
+                    Token.Print(node.IfKeyword),
+                    " ",
+                    Token.Print(node.OpenParenToken),
+                    Doc.Group(Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)), Doc.SoftLine),
+                    Token.Print(node.CloseParenToken)
+                ),
+                OptionalBraces.Print(node.Statement)
             );
 
             if (node.Else != null)

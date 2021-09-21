@@ -63,7 +63,8 @@ class ClassName
         [VeryLongAttributeName(SomeFlag.SomeValue, SomeOtherFlag.SomeOtherLongValue)]
             string tabbedBreakParameter,
         bool anotherParameter
-    ) {
+    )
+    {
         return;
     }
 

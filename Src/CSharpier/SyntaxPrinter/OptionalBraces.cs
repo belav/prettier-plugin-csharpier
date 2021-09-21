@@ -9,12 +9,10 @@ namespace CSharpier.SyntaxPrinter
 {
     public static class OptionalBraces
     {
-        public static Doc Print(StatementSyntax node, string? groupId = null)
+        public static Doc Print(StatementSyntax node)
         {
             return node is BlockSyntax blockSyntax
-                ? groupId == null
-                    ? Block.Print(blockSyntax)
-                    : Block.PrintWithConditionalSpace(blockSyntax, groupId)
+                ? Block.Print(blockSyntax)
                 : Doc.Indent(Doc.HardLine, Node.Print(node));
         }
     }

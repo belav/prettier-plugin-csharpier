@@ -27,7 +27,8 @@ public class ClassName
         else if (
             jklasdfklalsdkfjlkasdflkaslkjfjsdkf
             || kljadsfklaskldflkjasdfklaskjdfjklasdfjlkasdfjlkasdf
-        ) {
+        )
+        {
             DoElse();
         }
     }

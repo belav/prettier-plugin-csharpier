@@ -16,18 +16,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.DelegateKeyword)
             };
 
-            string? groupId = null;
             if (node.ParameterList != null)
             {
-                groupId = Guid.NewGuid().ToString();
-                docs.Add(ParameterList.Print(node.ParameterList, groupId));
+                docs.Add(ParameterList.Print(node.ParameterList));
             }
 
-            docs.Add(
-                groupId == null
-                    ? Block.Print(node.Block)
-                    : Block.PrintWithConditionalSpace(node.Block, groupId)
-            );
+            docs.Add(Block.Print(node.Block));
 
             return Doc.Concat(docs);
         }

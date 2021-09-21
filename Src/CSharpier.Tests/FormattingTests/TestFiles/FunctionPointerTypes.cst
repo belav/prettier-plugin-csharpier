@@ -14,7 +14,8 @@ class ClassName
             NativeMethods.REQUEST_NOTIFICATION_STATUS> asyncCallback,
         delegate* unmanaged<IntPtr, void> requestsDrainedHandler,
         IntPtr pvRequestContext
-    ) {
+    )
+    {
         return;
     }
 

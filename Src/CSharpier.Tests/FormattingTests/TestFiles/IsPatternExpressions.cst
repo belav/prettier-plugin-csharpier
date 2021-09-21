@@ -35,7 +35,8 @@ class ClassName
                 SomeProperty: "someValue________________",
                 SomeOtherProperty: "someOtherValue______________"
             }
-        ) {
+        )
+        {
             return;
         }
 
@@ -50,7 +51,8 @@ class ClassName
         if (
             someRandomValue___________________ is SomeRandomType someRandomType
             && someRandomType.IsEnum
-        ) {
+        )
+        {
             return;
         }
 
@@ -120,14 +122,16 @@ class ClassName
         if (
             someOtherValue_____________
             is (SomeLongType_____________ or SomeOtherLongType_____________)
-        ) {
+        )
+        {
             return;
         }
 
         if (
             someOtherValue_____________
             is not (SomeLongType_____________ or SomeOtherLongType_____________)
-        ) {
+        )
+        {
             return;
         }
 
@@ -137,7 +141,8 @@ class ClassName
                 SomeLongType_____________________________________
                 or SomeLongType_____________________________________
             )
-        ) {
+        )
+        {
             return;
         }
 
@@ -146,7 +151,8 @@ class ClassName
             {
                 SomeProperty: SomeOtherType_____________________________
             }
-        ) {
+        )
+        {
             return;
         }
 
@@ -158,7 +164,8 @@ class ClassName
                     Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax
                 },
             }
-        ) {
+        )
+        {
             return;
         }
 
@@ -170,7 +177,8 @@ class ClassName
                     Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax______________
                 },
             }
-        ) {
+        )
+        {
             return;
         }
 
@@ -181,28 +189,32 @@ class ClassName
                     Operand: ParenthesizedExpressionSyntax or IsPatternExpressionSyntax
                 }
             )
-        ) {
+        )
+        {
             return;
         }
 
         if (
             someLongName____________________________________________________ is
             { } anotherLongName______________________
-        ) {
+        )
+        {
             return;
         }
 
         if (
             someLongVariableName____________
             is SomeLongTypeName______________________________ someOtherLongVariableName_____________
-        ) {
+        )
+        {
             return;
         }
 
         if (
             someArray[index]
             is SomeLongTypeName______________________________ someOtherLongVariableName_____________
-        ) {
+        )
+        {
             return;
         }
 
@@ -211,7 +223,8 @@ class ClassName
             is SomeObjectType
                 or SomeOtherObjectType
                 or YetAnotherObjectType
-        ) {
+        )
+        {
             return;
         }
 

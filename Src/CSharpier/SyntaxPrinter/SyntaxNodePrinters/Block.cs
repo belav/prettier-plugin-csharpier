@@ -11,16 +11,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(BlockSyntax node)
         {
-            return Print(node, null);
-        }
-
-        public static Doc PrintWithConditionalSpace(BlockSyntax node, string groupId)
-        {
-            return Print(node, groupId);
-        }
-
-        private static Doc Print(BlockSyntax node, string? groupId)
-        {
             if (
                 node.Statements.Count == 0
                 && node.Parent is MethodDeclarationSyntax
@@ -52,11 +42,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
 
             var result = Doc.Group(
-                groupId != null
-                    ? Doc.IfBreak(" ", Doc.Line, groupId)
-                    : node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax
-                        ? Doc.Null
-                        : Doc.Line,
+                node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax
+                    ? Doc.Null
+                    : Doc.Line,
                 Token.Print(node.OpenBraceToken),
                 node.Statements.Count == 0 ? " " : Doc.Concat(innerDoc, statementSeparator),
                 Token.Print(node.CloseBraceToken)

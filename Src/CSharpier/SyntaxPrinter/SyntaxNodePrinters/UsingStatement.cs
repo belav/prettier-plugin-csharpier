@@ -12,27 +12,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(UsingStatementSyntax node)
         {
-            var groupId = Guid.NewGuid().ToString();
-
-            var leadingTrivia =
-                node.AwaitKeyword.Kind() != SyntaxKind.None
-                    ? Token.PrintLeadingTrivia(node.AwaitKeyword)
-                    : Token.PrintLeadingTrivia(node.UsingKeyword);
-
             var docs = new List<Doc>
             {
                 ExtraNewLines.Print(node),
-                leadingTrivia,
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
+                    Token.Print(node.AwaitKeyword),
                     node.AwaitKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
-                    node.AwaitKeyword.Kind() == SyntaxKind.None
-                        ? Token.PrintWithoutLeadingTrivia(node.UsingKeyword)
-                        : Token.Print(node.UsingKeyword),
+                    Token.Print(node.UsingKeyword),
                     " ",
                     Token.Print(node.OpenParenToken),
-                    Doc.GroupWithId(
-                        groupId,
+                    Doc.Group(
                         Doc.Indent(
                             Doc.SoftLine,
                             node.Declaration != null
@@ -52,7 +41,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             else if (node.Statement is BlockSyntax blockSyntax)
             {
-                docs.Add(Block.PrintWithConditionalSpace(blockSyntax, groupId));
+                docs.Add(Block.Print(blockSyntax));
             }
             else
             {

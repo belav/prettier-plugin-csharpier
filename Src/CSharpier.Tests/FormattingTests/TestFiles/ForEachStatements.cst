@@ -11,14 +11,16 @@ public class ClassName
             var x in this.SomeMethodCall()
                 .SomeChainedCall()
                 .AnotherChainedCall__________________________()
-        ) {
+        )
+        {
             break;
         }
 
         foreach (
             var x // trailing
             in y
-        ) {
+        )
+        {
             return;
         }
 
@@ -41,7 +43,8 @@ public class ClassName
 
         foreach (
             var justOver100 in Something_______________________________________________________
-        ) {
+        )
+        {
             return;
         }
 
@@ -87,7 +90,8 @@ public class ClassName
             ).AsParallel()
                 .Select(l => (l, res: GenerateTable(l.l2, l.l3, cutOff)))
                 .OrderBy(v => v.res.Total)
-        ) {
+        )
+        {
             return;
         }
     }

@@ -3,19 +3,24 @@ public class ClassName
     public void MethodName()
     {
         this.Where(o => true);
+
         this.WhereAsync(async o => true);
+
         this.WhereAsync(static o => true);
-        this.WhereLongNameThatWillDoStuff(
-            anotherLongNameThatWillDoStuff => yetAnotherLongNameToDoStuff
+
+        this.Where___________________(
+            longName__________________ => someOtherLongName__________________
         );
-        this.WhereLongNameThatWillDoStuff(
-            anotherLongNameThatWillDoStuff111111111111111 =>
-                yetAnotherLongNameToDoStuff22222222222222
+
+        this.Where___________________(
+            superLongName________________________________ =>
+                someOtherLongName_______________________________
         );
-        this.WhereLongNameThatWillDoStuff(
-            anotherEvenLongerNameThatWillDoStuff =>
+
+        this.Where___________________(
+            superLongName________________________________ =>
             {
-                return anotherLongNameThatWillDoStuff;
+                return someOtherLongName__________________;
             }
         );
     }

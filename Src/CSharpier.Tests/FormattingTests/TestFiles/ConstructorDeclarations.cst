@@ -15,7 +15,8 @@ public class BasicClass
     public BasicClass(
         int two,
         string justOver100___________________________________________________
-    ) {
+    )
+    {
         return;
     }
 }
@@ -28,15 +29,18 @@ public class Initializers : BasicClass
 
     public Initializers(
         string longParameter_______________________________________________________________________________
-    ) : base(
-        longParameter_______________________________________________________________________________
-    ) { }
+    )
+        : base(
+            longParameter_______________________________________________________________________________
+        ) { }
 
     public Initializers(
         string longParameter_______________________________________________________________________________
-    ) : base(
-        longParameter_______________________________________________________________________________
-    ) {
+    )
+        : base(
+            longParameter_______________________________________________________________________________
+        )
+    {
         WithBody();
     }
 
@@ -63,7 +67,8 @@ public class Initializers : BasicClass
     public WithParameters(string parameter)
         : base(
             longParameter____________________________________________________________________________
-        ) {
+        )
+    {
         WithBody();
     }
 
@@ -72,10 +77,8 @@ public class Initializers : BasicClass
             longParameter____________________________________________________________________________
         ) { }
 
-    public Initializers(
-        string value
-    ) /*Comment*/
-      : base(value) { }
+    public Initializers(string value) /*Comment*/
+        : base(value) { }
 
     public LongMethodName___________________________________________________________()
         /*Comment*/: base(false) { }

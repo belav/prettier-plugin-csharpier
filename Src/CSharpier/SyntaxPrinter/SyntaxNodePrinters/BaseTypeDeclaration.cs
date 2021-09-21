@@ -20,7 +20,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             SyntaxToken? keyword = null;
             Doc members = Doc.Null;
             SyntaxToken? semicolonToken = null;
-            string? groupId = null;
 
             if (node is TypeDeclarationSyntax typeDeclarationSyntax)
             {
@@ -49,7 +48,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 else if (node is RecordDeclarationSyntax recordDeclarationSyntax)
                 {
                     keyword = recordDeclarationSyntax.Keyword;
-                    groupId = Guid.NewGuid().ToString();
                     parameterList = recordDeclarationSyntax.ParameterList;
                 }
 
@@ -90,7 +88,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (parameterList != null)
             {
-                docs.Add(ParameterList.Print(parameterList, groupId));
+                docs.Add(ParameterList.Print(parameterList));
             }
 
             if (node.BaseList != null)
@@ -106,18 +104,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     )
                 );
 
-                var groupedBaseListDoc = Doc.Group(Doc.Indent(Doc.Line, baseListDoc));
-
-                if (node is RecordDeclarationSyntax && parameterList != null)
-                {
-                    docs.Add(
-                        Doc.IfBreak(Doc.Concat(" ", baseListDoc), groupedBaseListDoc, groupId)
-                    );
-                }
-                else
-                {
-                    docs.Add(groupedBaseListDoc);
-                }
+                docs.Add(Doc.Group(Doc.Indent(Doc.Line, baseListDoc)));
             }
 
             docs.Add(ConstraintClauses.Print(constraintClauses));
@@ -126,11 +113,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 DocUtilities.RemoveInitialDoubleHardLine(members);
 
-                var useSpaceBraceWithParameterList = groupId != null && parameterList != null;
                 docs.Add(
-                    useSpaceBraceWithParameterList
-                        ? Doc.IfBreak(" ", Doc.Line, groupId)
-                        : Doc.HardLine,
+                    Doc.HardLine,
                     Token.Print(node.OpenBraceToken),
                     members,
                     Doc.HardLine,

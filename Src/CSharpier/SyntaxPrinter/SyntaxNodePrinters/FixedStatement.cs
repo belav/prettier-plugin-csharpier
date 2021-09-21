@@ -9,25 +9,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(FixedStatementSyntax node)
         {
-            var groupId = Guid.NewGuid().ToString();
-
             return Doc.Concat(
                 ExtraNewLines.Print(node),
-                Token.PrintLeadingTrivia(node.FixedKeyword),
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(node.FixedKeyword),
+                    Token.Print(node.FixedKeyword),
                     " ",
                     Token.Print(node.OpenParenToken),
-                    Doc.GroupWithId(
-                        groupId,
-                        Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration)),
-                        Doc.SoftLine
-                    ),
+                    Doc.Group(Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration)), Doc.SoftLine),
                     Token.Print(node.CloseParenToken),
                     Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 ),
                 node.Statement is BlockSyntax blockSyntax
-                    ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
+                    ? Block.Print(blockSyntax)
                     : Doc.IndentIf(
                           node.Statement is not FixedStatementSyntax,
                           Doc.Concat(Doc.HardLine, Node.Print(node.Statement))

@@ -8,7 +8,8 @@ class ClassName
     static Complex operator -(
         Complex someOverlyLongNameToForceBreak,
         Complex someOverlyLongNameToForceBreak2
-    ) {
+    )
+    {
         return a.Add(b);
     }
 }

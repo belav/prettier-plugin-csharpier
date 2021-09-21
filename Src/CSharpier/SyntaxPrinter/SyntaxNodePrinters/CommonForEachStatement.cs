@@ -10,13 +10,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(CommonForEachStatementSyntax node)
         {
-            var groupId = Guid.NewGuid().ToString();
-
-            var leadingTrivia =
-                node.AwaitKeyword.Kind() != SyntaxKind.None
-                    ? Token.PrintLeadingTrivia(node.AwaitKeyword)
-                    : Token.PrintLeadingTrivia(node.ForEachKeyword);
-
             var variable = node switch
             {
                 ForEachStatementSyntax forEach
@@ -28,33 +21,26 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var docs = Doc.Concat(
                 ExtraNewLines.Print(node),
-                leadingTrivia,
                 Doc.Group(
+                    Token.Print(node.AwaitKeyword),
+                    node.AwaitKeyword.Kind() is not SyntaxKind.None ? " " : Doc.Null,
+                    Token.Print(node.ForEachKeyword),
+                    " ",
+                    Token.Print(node.OpenParenToken),
                     Doc.Group(
-                        Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
-                        node.AwaitKeyword.Kind() is not SyntaxKind.None ? " " : Doc.Null,
-                        node.AwaitKeyword.Kind() is SyntaxKind.None
-                            ? Token.PrintWithoutLeadingTrivia(node.ForEachKeyword)
-                            : Token.Print(node.ForEachKeyword),
-                        " ",
-                        Token.Print(node.OpenParenToken),
-                        Doc.GroupWithId(
-                            groupId,
-                            Doc.Indent(
-                                Doc.SoftLine,
-                                variable,
-                                " ",
-                                Token.Print(node.InKeyword),
-                                " ",
-                                Node.Print(node.Expression)
-                            ),
-                            Doc.SoftLine
+                        Doc.Indent(
+                            Doc.SoftLine,
+                            variable,
+                            " ",
+                            Token.Print(node.InKeyword),
+                            " ",
+                            Node.Print(node.Expression)
                         ),
-                        Token.Print(node.CloseParenToken),
-                        Doc.IfBreak(Doc.Null, Doc.SoftLine)
+                        Doc.SoftLine
                     ),
-                    OptionalBraces.Print(node.Statement, groupId)
-                )
+                    Token.Print(node.CloseParenToken)
+                ),
+                OptionalBraces.Print(node.Statement)
             );
 
             return docs;
