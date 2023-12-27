@@ -10,4 +10,14 @@ public class Foo
 		 */
 		var x = 0;
 	}
+
+	/**
+	    spaces here
+	 */
+	int field;
+
+	/**
+		tab here
+	 */
+	int field;
 }

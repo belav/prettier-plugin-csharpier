@@ -21,6 +21,12 @@ public class ClassName
      */
     public class ClassName2 { } 
 
+    /*
+     this works
+
+    */
+    string EvenWithEmptyLine;
+
         /* this doesn't fail
 by trying to move it left 4 spaces */
     public class ClassName2 { } 
@@ -40,6 +46,14 @@ public interface Interface
 		that were in from of here
 		*/
 		void Method();
+
+    private class ClassName
+    {
+    /* this should add
+        stuff
+    */
+    int x;
+    }
 }
 
 /*

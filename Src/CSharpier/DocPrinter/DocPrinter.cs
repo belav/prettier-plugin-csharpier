@@ -2,6 +2,8 @@ using System.Text;
 
 namespace CSharpier.DocPrinter;
 
+using System.Runtime.InteropServices.ComTypes;
+
 internal class DocPrinter
 {
     protected readonly Stack<PrintCommand> RemainingCommands = new();
@@ -184,42 +186,48 @@ internal class DocPrinter
 
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();
-        var numberOfSpacesToAddOrRemove = 0;
+        var firstLineIndentLength = 0;
         if (leadingComment.Type == CommentType.MultiLine && line != null)
         {
             // in order to maintain the formatting inside of a multiline comment
-            // we calculate how much the indentation of the first line is changing
-            // and then change the indentation of all other lines the same amount
-            var firstLineIndentLength = CalculateIndentLength(line);
-            var currentIndent = CalculateIndentLength(indent.Value);
-            numberOfSpacesToAddOrRemove = currentIndent - firstLineIndentLength;
+            // we calculate how much indentation the first line has so we can trim the same
+            // amount off each line
+            firstLineIndentLength = CalculateIndentLength(line);
         }
 
         while (line != null)
         {
             if (leadingComment.Type == CommentType.SingleLine)
             {
-                this.Output.Append(indent.Value);
+                this.Output.Append(indent.Value).Append(line.Trim());
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(line))
             {
-                var spacesToAppend = CalculateIndentLength(line) + numberOfSpacesToAddOrRemove;
-                if (this.PrinterOptions.UseTabs)
+                var thingsToRemove = firstLineIndentLength;
+                var index = 0;
+                while (thingsToRemove > 0 && index < line.Length)
                 {
-                    var indentLength = CalculateIndentLength(indent.Value);
-                    if (spacesToAppend >= indentLength)
+                    if (line[index] == '\t')
                     {
-                        this.Output.Append(indent.Value);
-                        spacesToAppend -= indentLength;
+                        thingsToRemove -= 4;
                     }
+                    else
+                    {
+                        thingsToRemove -= 1;
+                    }
+
+                    index++;
                 }
-                if (spacesToAppend > 0)
+
+                var possibleThingsToRemove = CalculateIndentLength(line);
+                if (possibleThingsToRemove < index)
                 {
-                    this.Output.Append(' ', spacesToAppend);
+                    index = possibleThingsToRemove;
                 }
+
+                this.Output.Append(indent.Value).Append(line[index..]);
             }
 
-            this.Output.Append(line.Trim());
             line = stringReader.ReadLine();
             if (line == null)
             {
