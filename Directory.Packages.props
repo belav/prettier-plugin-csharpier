@@ -6,7 +6,7 @@
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.11" />
     <PackageVersion Include="BenchmarkDotNet.Annotations" Version="0.13.11" />
     <PackageVersion Include="CliWrap" Version="3.6.4" />
-    <PackageVersion Include="DiffEngine" Version="6.5.7" />
+    <PackageVersion Include="DiffEngine" Version="15.5.1" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
     <PackageVersion Include="Ignore" Version="0.1.50" />
