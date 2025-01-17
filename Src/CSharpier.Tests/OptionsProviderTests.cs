@@ -529,6 +529,26 @@ indent_size = 2
     }
 
     [Test]
+    public async Task Should_Support_EditorConfig_Tabs_With_Glob_Braces_Only()
+    {
+        // TODO should we support | ? it seems to work when it isn't the first pattern in a file
+        // probably easier to just only support , - it is the standard way of doing glob patterns and I accidentally ended up with | in the documentation.
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            """
+            [*.{cs|csx}]
+            indent_style = space
+            indent_size = 2
+            max_line_length = 120
+            """
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+        result.IndentSize.Should().Be(2);
+    }
+
+    [Test]
     public async Task Should_Return_IndentSize_For_Formatter_In_Editorconfig()
     {
         var context = new TestContext();
