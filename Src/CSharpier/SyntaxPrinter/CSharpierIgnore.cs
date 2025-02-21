@@ -3,11 +3,31 @@ using System.Text.RegularExpressions;
 
 namespace CSharpier.SyntaxPrinter;
 
-internal static class CSharpierIgnore
+internal static partial class CSharpierIgnore
 {
+#if NET8_0_OR_GREATER
+    [GeneratedRegex("^// csharpier-ignore($| -)")]
+    private static partial Regex IgnoreRegexGenerator();
+
+    [GeneratedRegex("^// csharpier-ignore-start($| -)")]
+    private static partial Regex IgnoreStartRegexGenerator();
+
+    [GeneratedRegex("^// csharpier-ignore-end($| -)")]
+    private static partial Regex IgnoreEndRegexGenerator();
+
+    [GeneratedRegex(@"[\t\v\f ]*(\r\n?|\n)")]
+    private static partial Regex WhiteSpaceLineEndingsGenerator();
+
+    private static readonly Regex IgnoreRegex = IgnoreRegexGenerator();
+    public static readonly Regex IgnoreStartRegex = IgnoreStartRegexGenerator();
+    public static readonly Regex IgnoreEndRegex = IgnoreEndRegexGenerator();
+    public static readonly Regex WhiteSpaceLineEndingsRegex = WhiteSpaceLineEndingsGenerator();
+#else
     private static readonly Regex IgnoreRegex = new("^// csharpier-ignore($| -)");
     public static readonly Regex IgnoreStartRegex = new("^// csharpier-ignore-start($| -)");
     public static readonly Regex IgnoreEndRegex = new("^// csharpier-ignore-end($| -)");
+    public static readonly Regex WhiteSpaceLineEndingsRegex = new(@"[\t\v\f ]*(\r\n?|\n)");
+#endif
 
     public static bool HasIgnoreComment(SyntaxNode syntaxNode) =>
         Token.HasLeadingCommentMatching(syntaxNode, IgnoreRegex);
@@ -83,6 +103,6 @@ internal static class CSharpierIgnore
     public static string PrintWithoutFormatting(string code, PrintingContext context)
     {
         // trim trailing whitespace + replace only existing line endings
-        return Regex.Replace(code, @"[\t\v\f ]*(\r\n?|\n)", context.Options.LineEnding);
+        return WhiteSpaceLineEndingsRegex.Replace(code, context.Options.LineEnding);
     }
 }
