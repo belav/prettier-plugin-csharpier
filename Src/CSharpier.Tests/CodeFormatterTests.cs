@@ -64,6 +64,24 @@ internal sealed class CodeFormatterTests
     }
 
     [Test]
+    public void Format_Should_Use_Width_For_Single_Line_Comment()
+    {
+        var code = "// Test very long line comment. \n // Second line of long comment. \n var someVariable = someValue;";
+        var result = CodeFormatter.Format(code, new CodeFormatterOptions { Width = 10 });
+        result.Code.Should().Be("// Test\n// very long\n// line\n// comment.\n// Second\n// line of\n// long\n// comment.\nvar someVariable =\n    someValue;\n");
+    }
+
+    [Test]
+    public void Format_Should_Use_Width_For_Multi_Line_Comments()
+    {
+        var code = 
+            "/* Test very long line comment.\n Second line of long comment.\n Third line of long comment. */\n var someVariable = someValue;";
+        var result = CodeFormatter.Format(code, new CodeFormatterOptions { Width = 10 });
+
+        result.Code.Should().Be("/* Test\nvery long\nline\ncomment.\nSecond\nline of\nlong\ncomment.\nThird line\nof long\ncomment.\n*/\nvar someVariable =\n    someValue;\n");
+    }
+
+    [Test]
     public void Format_Should_Measure_Regular_Characters()
     {
         var code = """
