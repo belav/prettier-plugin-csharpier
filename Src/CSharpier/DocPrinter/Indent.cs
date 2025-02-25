@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 
 namespace CSharpier.DocPrinter;
@@ -26,6 +27,7 @@ internal class AlignType : IIndentType
 internal class Indenter(PrinterOptions printerOptions)
 {
     protected readonly PrinterOptions PrinterOptions = printerOptions;
+    protected readonly Dictionary<string, Indent> IncreaseIndentCache = new();
 
     public static Indent GenerateRoot()
     {
@@ -34,27 +36,30 @@ internal class Indenter(PrinterOptions printerOptions)
 
     public Indent IncreaseIndent(Indent indent)
     {
-        if (this.PrinterOptions.UseTabs)
+        if (indent.TypesForTabs != null && this.PrinterOptions.UseTabs)
         {
-            if (indent.TypesForTabs != null)
-            {
-                return this.MakeIndentWithTypesForTabs(indent, IndentType.Instance);
-            }
+            return this.MakeIndentWithTypesForTabs(indent, IndentType.Instance);
+        }
 
-            return new Indent
+        if (IncreaseIndentCache.TryGetValue(indent.Value, out var increasedIndent))
+        {
+            return increasedIndent;
+        }
+
+        var nextIndent = this.PrinterOptions.UseTabs
+            ? new Indent
             {
                 Value = indent.Value + "\t",
                 Length = indent.Length + this.PrinterOptions.IndentSize,
-            };
-        }
-        else
-        {
-            return new Indent
+            }
+            : new Indent
             {
-                Value = indent.Value + new string(' ', this.PrinterOptions.IndentSize),
+                Value = indent.Value.PadRight(indent.Value.Length + this.PrinterOptions.IndentSize),
                 Length = indent.Length + this.PrinterOptions.IndentSize,
             };
-        }
+
+        IncreaseIndentCache[indent.Value] = nextIndent;
+        return nextIndent;
     }
 
     public Indent AddAlign(Indent indent, int alignment)
@@ -67,7 +72,7 @@ internal class Indenter(PrinterOptions printerOptions)
         {
             return new Indent
             {
-                Value = indent.Value + new string(' ', alignment),
+                Value = indent.Value.PadRight(indent.Value.Length + alignment),
                 Length = indent.Length + alignment,
             };
         }
