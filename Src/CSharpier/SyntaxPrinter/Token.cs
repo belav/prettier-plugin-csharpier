@@ -44,13 +44,16 @@ internal static class Token
             return Doc.Null;
         }
 
-        var docs = new List<Doc>();
+        var docs = new ValueListBuilder<Doc>(
+            [default, default, default, default, default, default, default, default]
+        );
+
         if (!skipLeadingTrivia && !context.State.SkipNextLeadingTrivia)
         {
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
             {
-                docs.Add(leadingTrivia);
+                docs.Append(leadingTrivia);
             }
         }
 
@@ -73,7 +76,7 @@ internal static class Token
         )
         {
             var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
-            docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+            docs.Append(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
         }
         else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
         {
@@ -105,7 +108,7 @@ internal static class Token
 
             var hasArgumentParent = syntaxToken.Parent.HasParent(typeof(ArgumentSyntax));
 
-            docs.Add(Doc.IndentIf(!hasArgumentParent, Doc.Concat(contents)));
+            docs.Append(Doc.IndentIf(!hasArgumentParent, Doc.Concat(contents)));
         }
         else if (
             syntaxToken.RawSyntaxKind()
@@ -113,11 +116,11 @@ internal static class Token
                 or SyntaxKind.InterpolatedRawStringEndToken
         )
         {
-            docs.Add(syntaxToken.Text.Trim());
+            docs.Append(syntaxToken.Text.Trim());
         }
         else
         {
-            docs.Add(syntaxToken.Text);
+            docs.Append(syntaxToken.Text);
         }
 
         if (!skipTrailingTrivia)
@@ -131,26 +134,29 @@ internal static class Token
                         == context.State.TrailingComma.TrailingComment
                 )
                 {
-                    docs.Add(context.State.TrailingComma.PrintedTrailingComma);
+                    docs.Append(context.State.TrailingComma.PrintedTrailingComma);
                     context.State.MovedTrailingTrivia = true;
                     context.State.TrailingComma = null;
                 }
 
-                docs.Add(trailingTrivia);
+                docs.Append(trailingTrivia);
             }
         }
 
         if (suffixDoc != null)
         {
-            docs.Add(suffixDoc);
+            docs.Append(suffixDoc);
         }
 
-        return docs.Count switch
+        var returnDoc = docs.Length switch
         {
             <= 0 => Doc.Null,
-            1 => docs.First(),
-            _ => Doc.Concat(docs),
+            1 => docs[0],
+            _ => Doc.Concat(docs.AsSpan().ToArray()),
         };
+        docs.Dispose();
+
+        return returnDoc;
     }
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, PrintingContext context)
@@ -386,20 +392,31 @@ internal static class Token
             return Doc.Null;
         }
 
-        var docs = new List<Doc>();
+        var docs = new ValueListBuilder<Doc>(
+            [default, default, default, default, default, default, default, default]
+        );
         foreach (var trivia in trailingTrivia)
         {
             if (trivia.RawSyntaxKind() == SyntaxKind.SingleLineCommentTrivia)
             {
-                docs.Add(Doc.TrailingComment(trivia.ToString(), CommentType.SingleLine));
+                docs.Append(Doc.TrailingComment(trivia.ToString(), CommentType.SingleLine));
             }
             else if (trivia.RawSyntaxKind() == SyntaxKind.MultiLineCommentTrivia)
             {
-                docs.Add(" ", Doc.TrailingComment(trivia.ToString(), CommentType.MultiLine));
+                Span<Doc> docSpan =
+                [
+                    " ",
+                    Doc.TrailingComment(trivia.ToString(), CommentType.MultiLine),
+                ];
+                var segmentSpan = docs.AppendSpan(docSpan.Length);
+                docSpan.CopyTo(segmentSpan);
             }
         }
 
-        return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
+        var returnDoc = docs.Length > 0 ? Doc.Concat(docs.AsSpan().ToArray()) : Doc.Null;
+        docs.Dispose();
+
+        return returnDoc;
     }
 
     public static bool HasComments(SyntaxToken syntaxToken)
