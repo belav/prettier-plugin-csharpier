@@ -127,17 +127,17 @@ internal static class DocSerializer
             {
                 AppendIndent();
                 result.Append("Doc.Concat(");
-                if (concat.Contents.Count > 0)
+                if (concat.Count > 0)
                 {
                     result.AppendLine();
                 }
             }
 
-            for (var x = 0; x < concat.Contents.Count; x++)
+            for (var x = 0; x < concat.Count; x++)
             {
-                Serialize(concat.Contents[x], result, skipConcat ? indent : indent + 1);
+                Serialize(concat[x], result, skipConcat ? indent : indent + 1);
 
-                if (x < concat.Contents.Count - 1)
+                if (x < concat.Count - 1)
                 {
                     result.AppendLine(",");
                 }

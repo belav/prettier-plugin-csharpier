@@ -104,15 +104,14 @@ internal static class PropagateBreaks
             if (doc is Concat concat)
             {
                 // push onto stack in reverse order so they are processed in the original order
-                for (var x = concat.Contents.Count - 1; x >= 0; --x)
+                for (var x = concat.Count - 1; x >= 0; --x)
                 {
-                    if (forceFlat > 0 && concat.Contents[x] is LineDoc { IsLiteral: false } lineDoc)
+                    if (forceFlat > 0 && concat[x] is LineDoc { IsLiteral: false } lineDoc)
                     {
-                        concat.Contents[x] =
-                            lineDoc.Type == LineDoc.LineType.Soft ? string.Empty : " ";
+                        concat[x] = lineDoc.Type == LineDoc.LineType.Soft ? string.Empty : " ";
                     }
 
-                    docsStack.Push(concat.Contents[x]);
+                    docsStack.Push(concat[x]);
                 }
             }
             else if (doc is IfBreak ifBreak)

@@ -63,8 +63,8 @@ internal static class DocFitter
                 case Region:
                     return false;
                 case Concat concat:
-                    for (var i = concat.Contents.Count - 1; i >= 0; i--)
-                        Push(concat.Contents[i], currentMode, currentIndent);
+                    for (var i = concat.Count - 1; i >= 0; i--)
+                        Push(concat[i], currentMode, currentIndent);
                     break;
                 case IndentDoc indent:
                     Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));

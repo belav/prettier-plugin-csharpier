@@ -49,12 +49,14 @@ internal abstract class Doc
         new() { Type = commentType, Comment = comment };
 
     public static Doc Concat(List<Doc> contents) =>
-        contents.Count == 1 ? contents[0] : new Concat(contents);
+        contents.Count == 1 ? contents[0] : DocTypes.Concat.Create(contents);
 
     // prevents allocating an array if there is only a single parameter
     public static Doc Concat(Doc contents) => contents;
 
-    public static Doc Concat(params Doc[] contents) => new Concat(contents);
+    public static Doc Concat(Doc[] contents) => DocTypes.Concat.Create((IList<Doc>)contents);
+
+    public static Doc Concat(params ReadOnlySpan<Doc> contents) => DocTypes.Concat.Create(contents);
 
     public static Doc Join(Doc separator, IEnumerable<Doc> array)
     {

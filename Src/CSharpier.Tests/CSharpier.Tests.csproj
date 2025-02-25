@@ -7,6 +7,7 @@
     <SignAssembly>True</SignAssembly>
     <!-- DiffEngine references older packages and vulnerabilities on tests isn't a big deal -->
     <NuGetAuditMode>direct</NuGetAuditMode>
+    <LangVersion>13</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DiffEngine" />

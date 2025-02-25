@@ -85,9 +85,9 @@ internal class DocPrinter
         }
         else if (doc is Concat concat)
         {
-            for (var x = concat.Contents.Count - 1; x >= 0; x--)
+            for (var x = concat.Count - 1; x >= 0; x--)
             {
-                this.Push(concat.Contents[x], mode, indent);
+                this.Push(concat[x], mode, indent);
             }
         }
         else if (doc is IndentDoc indentDoc)
