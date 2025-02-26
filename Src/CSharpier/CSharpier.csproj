@@ -8,6 +8,7 @@
     <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
     <PublicKey>002400000480000094000000060200000024000052534131000400000100010049d266ea1aeae09c0abfce28b8728314d4e4807126ee8bc56155a7ddc765997ed3522908b469ae133fc49ef0bfa957df36082c1c2e0ec8cdc05a4ca4dbd4e1bea6c17fc1008555e15af13a8fc871a04ffc38f5e60e6203bfaf01d16a2a283b90572ade79135801c1675bf38b7a5a60ec8353069796eb53a26ffdddc9ee1273be</PublicKey>
+    <LangVersion>13</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
