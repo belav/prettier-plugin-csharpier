@@ -23,6 +23,7 @@ internal class Program
     public static async Task<int> Run(
         string[]? directoryOrFile,
         bool check,
+        bool msBuildFormat,
         bool fast,
         bool skipWrite,
         bool writeStdout,
@@ -42,7 +43,7 @@ internal class Program
         var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
 
         var console = new SystemConsole();
-        var logger = new ConsoleLogger(console, logLevel);
+        var logger = new ConsoleLogger(console, logLevel, msBuildFormat);
 
         if (pipeMultipleFiles)
         {
@@ -89,6 +90,7 @@ internal class Program
             OriginalDirectoryOrFilePaths = originalDirectoryOrFile!,
             StandardInFileContents = standardInFileContents,
             Check = check,
+            MsBuildFormat = msBuildFormat,
             NoCache = noCache,
             NoMSBuildCheck = noMSBuildCheck,
             Fast = fast,

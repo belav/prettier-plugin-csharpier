@@ -7,6 +7,7 @@ internal class CommandLineOptions
 {
     public string[] DirectoryOrFilePaths { get; init; } = [];
     public bool Check { get; init; }
+    public bool MsBuildFormat { get; init; }
     public bool Fast { get; init; }
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }
@@ -21,6 +22,7 @@ internal class CommandLineOptions
     internal delegate Task<int> Handler(
         string[] directoryOrFile,
         bool check,
+        bool msBuildFormat,
         bool fast,
         bool skipWrite,
         bool writeStdout,
@@ -51,6 +53,10 @@ internal class CommandLineOptions
                 ["--loglevel"],
                 () => LogLevel.Information.ToString(),
                 "Specify the log level - Debug, Information (default), Warning, Error, None"
+            ),
+            new Option(
+                ["--msbuild-format"],
+                "Formats messages in standard error/warning format for MSBuild."
             ),
             new Option(
                 ["--no-cache"],
