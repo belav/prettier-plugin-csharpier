@@ -56,28 +56,23 @@ internal abstract class Doc
 
     public static Doc Concat(params Doc[] contents) => new Concat(contents);
 
-    public static Doc Join(Doc separator, IEnumerable<Doc> array)
+    public static Doc Join(Doc separator, IEnumerable<Doc> enumerable)
     {
         var docs = new List<Doc>();
 
-        var list = array.ToList();
-
-        if (list.Count == 1)
-        {
-            return list[0];
-        }
-
-        for (var x = 0; x < list.Count; x++)
+        var x = 0;
+        foreach (var doc in enumerable)
         {
             if (x != 0)
             {
                 docs.Add(separator);
             }
 
-            docs.Add(list[x]);
+            docs.Add(doc);
+            x++;
         }
 
-        return Concat(docs);
+        return docs.Count == 1 ? docs[0] : Concat(docs);
     }
 
     public static ForceFlat ForceFlat(List<Doc> contents) =>
