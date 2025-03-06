@@ -117,7 +117,7 @@ internal static class Token
         }
         else
         {
-            docs.Add(syntaxToken.Text);
+            docs.Add(StringDoc.ToStringDoc(syntaxToken));
         }
 
         if (!skipTrailingTrivia)
