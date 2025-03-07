@@ -7,9 +7,9 @@ internal static class ConstraintClauses
         PrintingContext context
     )
     {
-        var constraintClausesList = constraintClauses.ToList();
+        var constraintClausesList = constraintClauses.ToArray();
 
-        if (constraintClausesList.Count == 0)
+        if (constraintClausesList.Length == 0)
         {
             return Doc.Null;
         }

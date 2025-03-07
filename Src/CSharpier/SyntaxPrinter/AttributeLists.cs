@@ -13,7 +13,7 @@ internal static class AttributeLists
             return Doc.Null;
         }
 
-        var docs = new List<Doc>();
+        var docs = new ValueListBuilder<Doc>([null, null]);
         Doc separator = node
             is TypeParameterSyntax
                 or ParameterSyntax
@@ -21,13 +21,15 @@ internal static class AttributeLists
             ? Doc.Line
             : Doc.HardLine;
 
-        docs.Add(Doc.Join(separator, attributeLists.Select(o => AttributeList.Print(o, context))));
+        docs.Append(
+            Doc.Join(separator, attributeLists.Select(o => AttributeList.Print(o, context)))
+        );
 
         if (node is not (ParameterSyntax or TypeParameterSyntax))
         {
-            docs.Add(separator);
+            docs.Append(separator);
         }
 
-        return Doc.Concat(docs);
+        return Doc.Concat(ref docs);
     }
 }
