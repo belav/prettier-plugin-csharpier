@@ -1,4 +1,9 @@
+using CSharpier.DocTypes;
+using System;
+using System.Collections;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml.Linq;
 
 namespace CSharpier.DocPrinter;
 
@@ -70,6 +75,8 @@ internal class DocPrinter
 
         this.Output.Append(this.EndOfLine);
     }
+
+    
 
     private void ProcessNextCommand()
     {
@@ -186,6 +193,47 @@ internal class DocPrinter
         }
     }
 
+    private List<string> BreakCommentLine(string comment)
+    {
+        List<string> result = new List<string>();
+        if (comment.Length > this.PrinterOptions.Width)
+        {
+            string[] comments = comment.Split(' ');
+            StringBuilder singleLine = new StringBuilder();
+            bool firstLine = true;
+            foreach (var word in comments)
+            {
+                if (singleLine.Length + word.Length >= this.PrinterOptions.Width)
+                {
+                    result.Add(singleLine.ToString());
+                    singleLine.Clear();
+                    if (firstLine)
+                    {
+                        firstLine = false;
+                    }
+                }
+
+                if (singleLine.Length > 0)
+                {
+                    singleLine.Append(' ');
+                }
+
+                singleLine.Append(word);
+            }
+
+            if (singleLine.Length > 0)
+            {
+                result.Add(singleLine.ToString());
+            }
+        }
+        else
+        {
+            result.Add(comment);
+        }
+
+        return result;
+    }
+
     private void AppendComment(LeadingComment leadingComment, Indent indent)
     {
         int CalculateIndentLength(string line) =>
@@ -206,42 +254,68 @@ internal class DocPrinter
 
         while (line != null)
         {
-            if (leadingComment.Type == CommentType.SingleLine)
-            {
-                this.Output.Append(indent.Value);
-            }
-            else
-            {
-                var spacesToAppend = CalculateIndentLength(line) + numberOfSpacesToAddOrRemove;
-                if (this.PrinterOptions.UseTabs)
-                {
-                    var indentLength = CalculateIndentLength(indent.Value);
-                    if (spacesToAppend >= indentLength)
-                    {
-                        this.Output.Append(indent.Value);
-                        spacesToAppend -= indentLength;
-                    }
+            string entireLine = line;
+            List<string> lines = BreakCommentLine(line.Trim());
 
-                    while (spacesToAppend > 0 && spacesToAppend >= this.PrinterOptions.IndentSize)
+            var nextLine = stringReader.ReadLine();
+
+            int total = lines.Count;
+            int lineNumber = 0;
+            foreach (var singleLine in lines)
+            {
+                if (leadingComment.Type == CommentType.SingleLine)
+                {
+                    this.Output.Append(indent.Value);
+                }
+                else
+                {
+                    var spacesToAppend = CalculateIndentLength(singleLine) + numberOfSpacesToAddOrRemove;
+                    if (this.PrinterOptions.UseTabs)
                     {
-                        this.Output.Append('\t');
-                        spacesToAppend -= this.PrinterOptions.IndentSize;
+                        var indentLength = CalculateIndentLength(indent.Value);
+                        if (spacesToAppend >= indentLength)
+                        {
+                            this.Output.Append(indent.Value);
+                            spacesToAppend -= indentLength;
+                        }
+
+                        while (spacesToAppend > 0 && spacesToAppend >= this.PrinterOptions.IndentSize)
+                        {
+                            this.Output.Append('\t');
+                            spacesToAppend -= this.PrinterOptions.IndentSize;
+                        }
+                    }
+                    if (spacesToAppend > 0)
+                    {
+                        this.Output.Append(' ', spacesToAppend);
                     }
                 }
-                if (spacesToAppend > 0)
+
+                if (leadingComment.Type == CommentType.SingleLine && lineNumber > 0)
                 {
-                    this.Output.Append(' ', spacesToAppend);
+                    this.Output.Append("// ");
                 }
+
+                this.Output.Append(singleLine.Trim());
+
+                // Printer will generate a new line for the next line after the comment.
+                if (nextLine != null || lineNumber < total - 1)
+                {
+                    this.Output.Append(this.EndOfLine);
+                }
+
+                ++lineNumber;
             }
 
-            this.Output.Append(line.Trim());
-            line = stringReader.ReadLine();
-            if (line == null)
+            
+            if (nextLine == null)
             {
                 return;
             }
-
-            this.Output.Append(this.EndOfLine);
+            else
+            {
+                line = nextLine;
+            }
         }
     }
 
