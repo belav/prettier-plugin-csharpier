@@ -4,13 +4,13 @@ internal static class IfStatement
 {
     public static Doc Print(IfStatementSyntax node, PrintingContext context)
     {
-        var docs = new List<Doc>();
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null]);
         if (node.Parent is not ElseClauseSyntax)
         {
-            docs.Add(ExtraNewLines.Print(node));
+            docs.Append(ExtraNewLines.Print(node));
         }
 
-        docs.Add(
+        docs.Append(
             Token.Print(node.IfKeyword, context),
             " ",
             Doc.Group(
@@ -27,9 +27,9 @@ internal static class IfStatement
 
         if (node.Else != null)
         {
-            docs.Add(Doc.HardLine, Node.Print(node.Else, context));
+            docs.Append(Doc.HardLine, Node.Print(node.Else, context));
         }
 
-        return Doc.Concat(docs);
+        return Doc.Concat(ref docs);
     }
 }
