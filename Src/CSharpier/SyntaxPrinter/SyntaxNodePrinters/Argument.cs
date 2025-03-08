@@ -9,17 +9,17 @@ internal static class Argument
 
     public static Doc PrintModifiers(ArgumentSyntax node, PrintingContext context)
     {
-        var docs = new List<Doc>(2);
+        var docs = new ValueListBuilder<Doc>([null, null]);
         if (node.NameColon != null)
         {
-            docs.Add(BaseExpressionColon.Print(node.NameColon, context));
+            docs.Append(BaseExpressionColon.Print(node.NameColon, context));
         }
 
         if (node.RefKindKeyword.RawSyntaxKind() != SyntaxKind.None)
         {
-            docs.Add(Token.PrintWithSuffix(node.RefKindKeyword, " ", context));
+            docs.Append(Token.PrintWithSuffix(node.RefKindKeyword, " ", context));
         }
 
-        return Doc.Concat(docs);
+        return Doc.Concat(ref docs);
     }
 }

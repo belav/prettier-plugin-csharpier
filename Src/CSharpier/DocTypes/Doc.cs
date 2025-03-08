@@ -56,6 +56,16 @@ internal abstract class Doc
 
     public static Doc Concat(params Doc[] contents) => new Concat(contents);
 
+    public static Doc Concat(ref ValueListBuilder<Doc> contents)
+    {
+        return contents.Length switch
+        {
+            0 => Null,
+            1 => contents[0],
+            _ => new Concat(contents.AsSpan().ToArray()),
+        };
+    }
+
     public static Doc Join(Doc separator, IEnumerable<Doc> array)
     {
         var docs = new List<Doc>();
