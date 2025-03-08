@@ -4,17 +4,15 @@ internal static class SwitchSection
 {
     public static Doc Print(SwitchSectionSyntax node, PrintingContext context)
     {
-        var docs = new List<Doc>
-        {
-            Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context))),
-        };
+        var docs = new ValueListBuilder<Doc>([null, null]);
+        docs.Append(Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context))));
         if (node.Statements is [BlockSyntax blockSyntax])
         {
-            docs.Add(Block.Print(blockSyntax, context));
+            docs.Append(Block.Print(blockSyntax, context));
         }
         else
         {
-            docs.Add(
+            docs.Append(
                 Doc.Indent(
                     node.Statements.First() is BlockSyntax ? Doc.Null : Doc.HardLine,
                     Doc.Join(
@@ -24,6 +22,6 @@ internal static class SwitchSection
                 )
             );
         }
-        return Doc.Concat(docs);
+        return Doc.Concat(ref docs);
     }
 }
