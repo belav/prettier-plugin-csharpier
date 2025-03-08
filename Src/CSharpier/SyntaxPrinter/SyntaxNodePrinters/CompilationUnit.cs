@@ -18,16 +18,16 @@ internal static class CompilationUnit
         {
             // really ugly code to prevent a comment at the end of a file from continually inserting new blank lines
             if (
-                finalTrivia is Concat { Contents.Count: > 1 } list
+                finalTrivia is Concat { Count: > 1 } list
                 && docs.Count > 0
-                && docs[^1] is Concat { Contents.Count: > 1 } previousList
-                && previousList.Contents[^1] is HardLine
-                && previousList.Contents[^2] is HardLine
+                && docs[^1] is Concat { Count: > 1 } previousList
+                && previousList[^1] is HardLine
+                && previousList[^2] is HardLine
             )
             {
-                while (list.Contents[0] is HardLine { SkipBreakIfFirstInGroup: true })
+                while (list[0] is HardLine { SkipBreakIfFirstInGroup: true })
                 {
-                    list.Contents.RemoveAt(0);
+                    list.RemoveAt(0);
                 }
 
                 docs.Add(finalTrivia);
