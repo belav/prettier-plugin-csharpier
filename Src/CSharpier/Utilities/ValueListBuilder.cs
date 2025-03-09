@@ -89,18 +89,19 @@ internal ref partial struct ValueListBuilder<T>
         _pos += source.Length;
     }
 
-    public void Insert(int index, scoped ReadOnlySpan<T> source)
+    public void Insert(int index, T item)
     {
-        Debug.Assert(index == 0, "Implementation currently only supports index == 0");
-
-        if ((uint)(_pos + source.Length) > (uint)_span.Length)
+        int pos = _pos;
+        if ((uint)pos >= (uint)_span.Length)
         {
-            Grow(source.Length);
+            Grow(1);
         }
 
-        _span.Slice(0, _pos).CopyTo(_span.Slice(source.Length));
-        source.CopyTo(_span);
-        _pos += source.Length;
+        var sp = _span;
+
+        _span.Slice(index, _pos - index).CopyTo(_span.Slice(index + 1));
+        _span[index] = item;
+        _pos += 1;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -141,9 +142,31 @@ internal ref partial struct ValueListBuilder<T>
         _pos = pos + 1;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T Pop()
+    {
+        _pos--;
+        return _span[_pos];
+    }
+
     public ReadOnlySpan<T> AsSpan()
     {
         return _span.Slice(0, _pos);
+    }
+
+    public List<T> ToList()
+    {
+        var list = new List<T>(_pos);
+#if NETSTANDARD2_0
+        foreach (var item in _span[.._pos])
+        {
+            list.Add(item);
+        }
+#else
+        list.AddRange(_span[.._pos]);
+#endif
+
+        return list;
     }
 
     public bool TryCopyTo(Span<T> destination, out int itemsWritten)
