@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
@@ -27,7 +29,7 @@ internal static class InvocationExpression
             ? GroupPrintedNodesPrettierStyle(printedNodes)
             : GroupPrintedNodesOnLines(printedNodes);
 
-        var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
+        var oneLine = SelectManyDocsToArray(groups);
 
         var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups, parent);
 
@@ -334,6 +336,30 @@ internal static class InvocationExpression
         }
 
         return groups;
+    }
+
+    [SuppressMessage("ReSharper", "ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator")]
+    private static Doc[] SelectManyDocsToArray(List<List<PrintedNode>> groups)
+    {
+        var arrayLength = 0;
+        foreach (var group in groups)
+        {
+            arrayLength += group.Count;
+        }
+
+        var outputArray = new Doc[arrayLength];
+
+        var pos = 0;
+        foreach (var group in groups)
+        {
+            foreach (var node in group)
+            {
+                outputArray[pos] = node.Doc;
+                pos++;
+            }
+        }
+
+        return outputArray;
     }
 
     private static Doc PrintIndentedGroup(List<List<PrintedNode>> groups)
