@@ -38,10 +38,14 @@ public class ClassName
         {
             case 1:
             {
+                CallMethod();
+
                 goto case 2;
             }
             case 2:
             {
+                CallMethod();
+
                 goto default;
             }
             default:
