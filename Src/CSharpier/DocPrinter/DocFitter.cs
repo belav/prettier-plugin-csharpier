@@ -39,11 +39,12 @@ internal static class DocFitter
                 _ => remainingCommands.ElementAt(x++),
             };
 
-            switch (currentDoc)
+            switch (currentDoc.Kind)
             {
-                case NullDoc:
+                case DocKind.Null:
                     break;
-                case StringDoc stringDoc:
+                case DocKind.String:
+                    var stringDoc = (StringDoc)currentDoc;
                     // directives should not be considered when calculating if something fits
                     if (stringDoc.Value == null || stringDoc.IsDirective)
                         continue;
@@ -54,26 +55,29 @@ internal static class DocFitter
                     output.Append(stringDoc.Value);
                     remainingWidth -= stringDoc.Value.GetPrintedWidth();
                     break;
-                case LeadingComment
-                or TrailingComment:
+                case DocKind.LeadingComment
+                or DocKind.TrailingComment:
                     if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
                         returnFalseIfMoreStringsFound = true;
 
                     break;
-                case Region:
+                case DocKind.Region:
                     return false;
-                case Concat concat:
+                case DocKind.Concat:
+                    var concat = (Concat)currentDoc;
                     for (var i = concat.Contents.Count - 1; i >= 0; i--)
                         Push(concat.Contents[i], currentMode, currentIndent);
                     break;
-                case IndentDoc indent:
+                case DocKind.Indent:
+                    var indent = (IndentDoc)currentDoc;
                     Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
                     break;
-                case Trim:
+                case DocKind.Trim:
                     remainingWidth += output.TrimTrailingWhitespace();
                     break;
-                case Group group:
+                case DocKind.Group:
                 {
+                    var group = (Group)currentDoc;
                     var groupMode = group.Break ? PrintMode.Break : currentMode;
 
                     // when determining if something fits, use the last option from a conditionalGroup, which should be the most expanded one
@@ -90,8 +94,9 @@ internal static class DocFitter
 
                     break;
                 }
-                case IfBreak ifBreak:
+                case DocKind.IfBreak:
                 {
+                    var ifBreak = (IfBreak)currentDoc;
                     var ifBreakMode =
                         ifBreak.GroupId != null
                         && groupModeMap.TryGetValue(ifBreak.GroupId, out var groupMode)
@@ -106,7 +111,8 @@ internal static class DocFitter
                     Push(contents, currentMode, currentIndent);
                     break;
                 }
-                case LineDoc line:
+                case DocKind.Line:
+                    var line = (LineDoc)currentDoc;
                     if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
                     {
                         if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
@@ -129,12 +135,13 @@ internal static class DocFitter
                     }
 
                     return true;
-                case ForceFlat flat:
+                case DocKind.ForceFlat:
+                    var flat = (ForceFlat)currentDoc;
                     Push(flat.Contents, PrintMode.ForceFlat, currentIndent);
                     break;
-                case BreakParent:
+                case DocKind.BreakParent:
                     break;
-                case AlwaysFits:
+                case DocKind.AlwaysFits:
                     break;
                 default:
                     throw new Exception("Can't handle " + currentDoc.GetType());

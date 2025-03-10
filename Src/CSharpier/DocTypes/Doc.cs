@@ -1,7 +1,28 @@
 namespace CSharpier.DocTypes;
 
-internal abstract class Doc
+internal enum DocKind : byte
 {
+    Trim,
+    TrailingComment,
+    AlwaysFits,
+    BreakParent,
+    String,
+    Region,
+    Null,
+    Line,
+    LeadingComment,
+    Indent,
+    IfBreak,
+    Group,
+    Marker,
+    Concat,
+    ForceFlat,
+}
+
+internal abstract class Doc(DocKind kind)
+{
+    public DocKind Kind { get; } = kind;
+
     public string Print()
     {
         return DocPrinter.DocPrinter.Print(this, new PrinterOptions(), Environment.NewLine);

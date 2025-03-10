@@ -2,6 +2,10 @@ namespace CSharpier.DocTypes;
 
 internal class LineDoc : Doc
 {
+    internal LineDoc()
+        : base(DocKind.Line) { }
+
+    // TODO maybe these should be the DocKinds?
     public enum LineType
     {
         Normal,
