@@ -1,9 +1,9 @@
-using System.IO.Abstractions.TestingHelpers;
-using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
+using System.IO.Abstractions.TestingHelpers;
+using System.Text;
 
 namespace CSharpier.Tests;
 
@@ -360,6 +360,23 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Should()
             .StartWith("Error ./Unformatted.cs - Was not formatted.");
+    }
+
+    [Test]
+    public void Format_Checks_Unformatted_File_With_MsBuildFormat_Message()
+    {
+        var context = new TestContext();
+        const string unformattedFilePath = "Unformatted.cs";
+        context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
+
+        var result = Format(context, check: true, logFormat: LogFormat.MsBuild);
+
+        result.ExitCode.Should().Be(1);
+        context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
+        result
+            .ErrorOutputLines.First()
+            .Should()
+            .StartWith("./Unformatted.cs: error: Was not formatted.");
     }
 
     [TestCase("Src/node_modules/File.cs")]
@@ -750,6 +767,7 @@ class ClassName
         TestContext context,
         bool skipWrite = false,
         bool check = false,
+        LogFormat logFormat = LogFormat.Console,
         bool writeStdout = false,
         bool includeGenerated = false,
         bool compilationErrorsAsWarnings = false,
@@ -772,7 +790,7 @@ class ClassName
         }
 
         var fakeConsole = new TestConsole();
-        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information);
+        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information, logFormat);
         var exitCode = CommandLineFormatter
             .Format(
                 new CommandLineOptions
@@ -782,6 +800,7 @@ class ClassName
                     OriginalDirectoryOrFilePaths = originalDirectoryOrFilePaths,
                     SkipWrite = skipWrite,
                     Check = check,
+                    LogFormat = logFormat,
                     WriteStdout = writeStdout || standardInFileContents != null,
                     StandardInFileContents = standardInFileContents,
                     IncludeGenerated = includeGenerated,

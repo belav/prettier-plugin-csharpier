@@ -2,7 +2,8 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-internal class ConsoleLogger(IConsole console, LogLevel loggingLevel) : ILogger
+internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat logFormat)
+    : ILogger
 {
     private static readonly object ConsoleLock = new();
 
@@ -52,7 +53,7 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel) : ILogger
         {
             var message = formatter(state, exception!);
 
-            if (logLevel >= LogLevel.Warning)
+            if (logFormat == LogFormat.Console && logLevel >= LogLevel.Warning)
             {
                 console.ForegroundColor = GetColorLevel(logLevel);
                 Write($"{logLevel} ");

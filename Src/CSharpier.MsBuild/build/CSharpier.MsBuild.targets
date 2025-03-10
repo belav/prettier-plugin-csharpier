@@ -43,9 +43,7 @@
       StdOutEncoding="utf-8"
       StdErrEncoding="utf-8"
       IgnoreExitCode="true"
-      IgnoreStandardErrorWarningFormat="true"
-      CustomErrorRegularExpression="^Error "
-      Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) "
+      Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --log-format msBuild --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) "
     />
   </Target>
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
